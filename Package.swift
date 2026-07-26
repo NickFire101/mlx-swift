@@ -11,8 +11,8 @@ let package = Package(
 
     products: [
         .library(name: "MLX", targets: ["MLX"]),
-        .library(name: "MLXRandom", targets: ["MLXRandom"]),
-        .library(name: "MLXNN", targets: ["MLXNN"])
+        .library(name: "MLXNN", targets: ["MLXNN"]),
+        .library(name: "MLXRandom", targets: ["MLXRandom"])
     ],
 
     dependencies: [
@@ -27,15 +27,6 @@ let package = Package(
         .target(
             name: "Cmlx",
             path: "Source/Cmlx",
-            exclude: [
-                "mlx/mlx/backend/cuda",
-                "mlx/mlx/backend/no_gpu",
-                "mlx/mlx/backend/no_cpu",
-                "mlx/mlx/distributed",
-                "mlx/mlx/python",
-                "mlx/examples",
-                "mlx/tests"
-            ],
             cSettings: [
                 .headerSearchPath("mlx"),
                 .headerSearchPath("mlx-c")
@@ -44,16 +35,11 @@ let package = Package(
                 .headerSearchPath("mlx"),
                 .headerSearchPath("mlx-c"),
                 .headerSearchPath("metal-cpp"),
-
                 .define("MLX_USE_ACCELERATE"),
                 .define("_METAL_"),
                 .define(
                     "SWIFTPM_BUNDLE",
                     to: "\"mlx-swift_Cmlx\""
-                ),
-                .define(
-                    "METAL_PATH",
-                    to: "\"default.metallib\""
                 )
             ],
             linkerSettings: [
@@ -78,14 +64,14 @@ let package = Package(
         ),
 
         .target(
-            name: "MLXRandom",
+            name: "MLXNN",
             dependencies: [
                 "MLX"
             ]
         ),
 
         .target(
-            name: "MLXNN",
+            name: "MLXRandom",
             dependencies: [
                 "MLX"
             ]
