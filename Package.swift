@@ -15,26 +15,39 @@ let package = Package(
         .library(name: "MLXRandom", targets: ["MLXRandom"])
     ],
 
-    dependencies: [
-        .package(
-            url: "https://github.com/apple/swift-numerics.git",
-            from: "1.0.0"
-        )
-    ],
-
     targets: [
 
         .target(
             name: "Cmlx",
             path: "Source/Cmlx",
+            exclude: [
+                "main.cpp",
+                "main.swift",
+
+                // CUDA
+                "mlx/mlx/backend/cuda",
+
+                // Unsupported / unused
+                "mlx/mlx/backend/no_gpu",
+                "mlx/mlx/backend/no_cpu",
+
+                // Examples/tests
+                "mlx/examples",
+                "mlx/tests",
+                "examples",
+                "tests"
+            ],
+
             cSettings: [
                 .headerSearchPath("mlx"),
                 .headerSearchPath("mlx-c")
             ],
+
             cxxSettings: [
                 .headerSearchPath("mlx"),
                 .headerSearchPath("mlx-c"),
                 .headerSearchPath("metal-cpp"),
+
                 .define("MLX_USE_ACCELERATE"),
                 .define("_METAL_"),
                 .define(
@@ -42,6 +55,7 @@ let package = Package(
                     to: "\"mlx-swift_Cmlx\""
                 )
             ],
+
             linkerSettings: [
                 .linkedFramework("Foundation"),
                 .linkedFramework("Metal"),
@@ -52,11 +66,7 @@ let package = Package(
         .target(
             name: "MLX",
             dependencies: [
-                "Cmlx",
-                .product(
-                    name: "Numerics",
-                    package: "swift-numerics"
-                )
+                "Cmlx"
             ],
             exclude: [
                 "GPU+CUDA.swift"
