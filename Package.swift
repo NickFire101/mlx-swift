@@ -20,22 +20,28 @@ let package = Package(
         .target(
             name: "Cmlx",
             path: "Source/Cmlx",
+
             exclude: [
+                // Executable files
                 "main.cpp",
                 "main.swift",
 
                 // CUDA
                 "mlx/mlx/backend/cuda",
 
-                // Unsupported / unused
-                "mlx/mlx/backend/no_gpu",
-                "mlx/mlx/backend/no_cpu",
+                // Metal shader sources
+                "mlx/mlx/backend/metal/kernels",
+                "mlx/mlx/backend/metal/jit",
+                "mlx/mlx/backend/metal/*.metal",
 
-                // Examples/tests
+                // Unsupported extras
+                "mlx-c/examples",
                 "mlx/examples",
                 "mlx/tests",
-                "examples",
-                "tests"
+                "tests",
+
+                // Distributed
+                "mlx/mlx/distributed"
             ],
 
             cSettings: [
@@ -50,9 +56,15 @@ let package = Package(
 
                 .define("MLX_USE_ACCELERATE"),
                 .define("_METAL_"),
+
                 .define(
                     "SWIFTPM_BUNDLE",
                     to: "\"mlx-swift_Cmlx\""
+                ),
+
+                .define(
+                    "METAL_PATH",
+                    to: "\"default.metallib\""
                 )
             ],
 
